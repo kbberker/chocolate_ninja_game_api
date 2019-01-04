@@ -16,6 +16,7 @@ class Api::V1::PlayersController < ApplicationController
   def create
     @player = Player.new(player_params)
     if @player.save
+      @player.scores.create({points: score_params})
       render json: @player
     else
       render json: {error: 'Unable to create player.'}, status: 400
@@ -35,5 +36,9 @@ class Api::V1::PlayersController < ApplicationController
   private
   def player_params
     params.require(:player).permit(:name)
+  end
+
+  def score_params
+    params.require(:points)
   end
 end
